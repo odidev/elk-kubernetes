@@ -12,7 +12,8 @@ before_script:
 
 script:
   - docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
-  - cd ./docker/elasticsearch/
-  - docker buildx build --platform linux/amd64,linux/arm64 -t odidev/elasticsearch:latest -t odidev/elasticsearch:latest --push .;
+  #- cd ./docker/elasticsearch/
+  #- docker buildx build --platform linux/amd64,linux/arm64 -t odidev/elasticsearch:latest -t odidev/elasticsearch:latest --push .;
+  - cd ./docker/elasticsearch_5x
   #- cd ../elasticsearch_5x
-  #- docker buildx build --platform linux/amd64,linux/arm64 -t odidev/elasticsearch_5x:latest -t odidev/elasticsearch_5x:latest --push .;
+  - docker buildx build --platform linux/amd64,linux/arm64 -t odidev/elasticsearch_5x:latest -t odidev/elasticsearch_5x:latest --push .;
