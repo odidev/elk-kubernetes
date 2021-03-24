@@ -1,4 +1,4 @@
-FROM alpine:3.5
+FROM alpine:3.12.4
 
 ENV JAVA_HOME=/usr/lib/jvm/default-jvm/jre
 
@@ -15,8 +15,13 @@ ENV GOSU_VERSION 1.7
 
 # Install Elasticsearch.
 RUN apk add --update curl ca-certificates sudo jq gnupg && \
-  curl -Lso /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-amd64" && \
-  curl -Lso /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-amd64.asc" && \
+  if [ `uname -m` = "aarch64" ] ; then \
+     curl -Lso /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-arm64" && \
+     curl -Lso /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-arm64.asc"; \
+  else \
+     curl -Lso /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-amd64" && \
+     curl -Lso /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-amd64.asc"; \
+  fi && \
   export GNUPGHOME="$(mktemp -d)" && \
   gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 && \
   gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu && \
